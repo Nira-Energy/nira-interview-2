@@ -10,6 +10,7 @@ from rich.table import Table
 
 from pipeline.domains import sales, inventory, logistics, hr, finance
 from pipeline.domains import marketing, support, procurement, manufacturing, quality
+from pipeline.validation import run_domain_expectations
 
 type DomainResult = dict[str, bool | str | int]
 
