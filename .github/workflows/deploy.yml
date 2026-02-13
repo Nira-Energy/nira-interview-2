@@ -1,0 +1,33 @@
+name: Build & Deploy Production Data
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pipx install poetry==2.2.0
+
+      - name: Install dependencies
+        run: poetry install --no-root
+
+      - name: Run pipeline validation
+        run: poetry run python -m pipeline.run --validate
+
+      - name: Deploy production data
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Deploying pipeline to production..."
+          poetry run python -m pipeline.deploy
